@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
+// 3. Widget Terpisah/Reusable (Stateless)
 class Question extends StatelessWidget {
   final String questionText;
 
-  // This is a constructor. It requires a questionText.
-  // const means it's a compile-time constant constructor.
+  // Constructor dengan key
   const Question(this.questionText, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Container adds padding and margin.
     return Container(
-      // double.infinity makes the container take all available width.
+      // 6. UI Dinamis: 'double.infinity' membuat container
+      //    mengisi lebar layar secara horizontal.
       width: double.infinity,
-      margin: const EdgeInsets.all(10),
+      // Beri jarak vertikal
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Text(
         questionText,
-        // Styles the text.
-        style: const TextStyle(fontSize: 28),
+        // 5. Font Kustom: Style di bawah ini akan digabungkan
+        //    dengan theme 'Montserrat' global dari main.dart
+        style: TextStyle(
+          fontSize: 24, // Ukuran font lebih besar untuk soal
+          fontWeight: FontWeight.bold, // Dibuat tebal agar menonjol
+        ),
         textAlign: TextAlign.center,
       ),
     );
   }
 }
+

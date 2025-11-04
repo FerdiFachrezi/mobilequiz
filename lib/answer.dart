@@ -1,30 +1,41 @@
 import 'package:flutter/material.dart';
 
-// Answer is another simple, stateless widget.
-// It displays a button for a single answer.
+// 3. Widget Terpisah/Reusable (Stateless)
 class Answer extends StatelessWidget {
-  // selectHandler is a function that will be called when the button is pressed.
+  // Function yang akan dieksekusi saat tombol ditekan
   final VoidCallback selectHandler;
-  // answerText is the text to display on the button.
   final String answerText;
 
+  // Constructor dengan key
   const Answer(this.selectHandler, this.answerText, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Container is used to make the button take up more width.
     return Container(
+      // 6. UI Dinamis: 'double.infinity' membuat container
+      //    mengisi lebar layar secara horizontal.
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      // Beri jarak antar tombol jawaban
+      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
       child: ElevatedButton(
-        // style: ElevatedButton.styleFrom(
-        //   primary: Colors.blue, // background color
-        //   onPrimary: Colors.white, // text color
-        // ),
+        // 4 & 5. Styling tombol agar lebih modern dan konsisten
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white, // Warna teks tombol
+          backgroundColor: Theme.of(context).primaryColor, // Warna latar tombol
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Sudut membulat
+          ),
+          padding: EdgeInsets.symmetric(vertical: 15), // Padding vertikal
+        ),
         onPressed: selectHandler,
-        child: Text(answerText),
+        child: Text(
+          answerText,
+          // Font 'Montserrat' akan diterapkan dari Theme global
+          style: TextStyle(fontSize: 16),
+        ),
       ),
     );
   }
 }
+

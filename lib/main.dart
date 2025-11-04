@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import './quiz.dart';
 import './result.dart';
 
+void main() => runApp(const MyApp());
 
-void main() => runApp(MyApp());
-
-
+// 1. MyApp adalah StatefulWidget untuk menyimpan state inti
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
@@ -15,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
+  // 7. State Management: State disimpan di sini dan aman saat rotasi
   final _questions = const [
     {
       'questionText': 'What\'s your favorite color?',
@@ -80,21 +81,35 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
-
-    if (_questionIndex < _questions.length) {
-      print('We have more questions!');
-    } else {
-      print('No more questions!');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      // 5. Menerapkan Font Kustom secara global
+      theme: ThemeData(
+        fontFamily: 'Montserrat',
+        primarySwatch: Colors.indigo, // Anda bisa ganti warnanya
+        // Terapkan style text agar konsisten
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+          titleLarge: TextStyle(fontFamily: 'Montserrat'),
+          bodyMedium: TextStyle(fontFamily: 'Montserrat'),
+        ),
+      ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('My First App'),
+          // 4. Menggunakan Aset Ikon
+          title: Row(
+            children: [
+              Icon(Icons.question_answer_rounded),
+              SizedBox(width: 10),
+              Text('Quiz App'),
+            ],
+          ),
         ),
+        // 2. Navigasi 2 Halaman (Quiz dan Result)
         body: _questionIndex < _questions.length
             ? Quiz(
                 answerQuestion: _answerQuestion,
@@ -106,3 +121,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
