@@ -1,96 +1,111 @@
 import 'package:flutter/material.dart';
 
-// 3. Widget Terpisah/Reusable (Stateless)
+// This is a stateless reusable widget for showing the result.
 class Result extends StatelessWidget {
   final int resultScore;
   final VoidCallback resetHandler;
+  final String userName; // 1. Tambahkan variabel userName
 
-  const Result(this.resultScore, this.resetHandler, {Key? key})
+  // 2. Perbarui constructor untuk menerima 3 nilai
+  const Result(this.resultScore, this.resetHandler, this.userName, {Key? key})
       : super(key: key);
 
-  // Getter (properti yang dihitung) untuk menampilkan teks hasil yang berbeda
+  // Getter untuk menghitung frasa hasil berdasarkan skor.
   String get resultPhrase {
     String resultText;
-    if (resultScore <= 15) {
-      resultText = 'You are awesome and innocent!';
-    } else if (resultScore <= 25) {
-      resultText = 'Pretty likeable!';
-    } else if (resultScore <= 35) {
-      resultText = 'You are ... strange?!';
+    if (resultScore <= 8) {
+      resultText = 'Semoga Beruntung lain kali!';
+    } else if (resultScore <= 12) {
+      resultText = 'Sedikit Lagi!';
+    } else if (resultScore <= 16) {
+      resultText = 'Lumayan!';
     } else {
-      resultText = 'You are so bad!';
+      resultText = 'Sangat Hebat!';
     }
     return resultText;
   }
 
   @override
   Widget build(BuildContext context) {
-    // 6. UI Dinamis: Gunakan SingleChildScrollView
-    //    Ini membuat konten bisa di-scroll jika terjadi overflow
+    // Dapatkan ukuran layar perangkat untuk padding yang responsif
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Gunakan SingleChildScrollView untuk mencegah overflow di layar kecil atau saat rotasi
     return SingleChildScrollView(
-      // Gunakan 'MediaQuery' untuk mengambil tinggi layar
-      // dan 'ConstrainedBox' untuk memastikan Column minimal setinggi layar
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height -
-              kToolbarHeight - // Tinggi AppBar
-              MediaQuery.of(context).padding.top, // Tinggi Status Bar
+      child: Container(
+        // Tambahkan padding dinamis berdasarkan lebar layar
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.1, // 10% dari lebar layar
+          vertical: screenHeight * 0.05, // 5% dari tinggi layar
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            // Pusatkan semua konten secara vertikal dan horizontal
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              // 4. Menggunakan Aset Ikon
-              Icon(
-                Icons.stars_rounded,
-                size: 100,
-                color: Colors.amber,
+        width: double.infinity, // Ambil lebar penuh
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Tengah secara vertikal
+          crossAxisAlignment: CrossAxisAlignment.center, // Tengah secara horizontal
+          children: <Widget>[
+            // Ikon dekoratif
+            Icon(
+              Icons.stars_rounded,
+              size: 120,
+              color: Colors.amber,
+            ),
+            SizedBox(height: 20),
+
+            // 3. Tampilkan pesan selamat yang dipersonalisasi
+            Text(
+              'Congratulations, $userName!', // Gunakan userName
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.indigo,
               ),
-              SizedBox(height: 20),
-              // 5. Teks dengan style font kustom
-              Text(
-                resultPhrase,
-                style: TextStyle(
-                  fontSize: 28,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 15),
+
+            // Tampilkan skor akhir
+            Text(
+              'Skor Anda : $resultScore / 50',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                // Gunakan warna primer dari tema
+                color: Theme.of(context).primaryColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 15),
+
+            // Tampilkan frasa hasil
+            Text(
+              resultPhrase,
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 30),
+
+            // Tombol untuk mengulang kuis
+            ElevatedButton(
+              child: Text('Restart Quiz'),
+              onPressed: resetHandler,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, // Warna teks
+                backgroundColor: Colors.indigo, // Warna tombol
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                textStyle: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'Montserrat', // Pastikan konsistensi font
                   fontWeight: FontWeight.bold,
-                  // Font family 'Montserrat' akan diambil dari Theme global
                 ),
-                textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10),
-              Text(
-                'Your Score: $resultScore',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 30),
-              // Tombol Restart dengan style baru
-              ElevatedButton.icon(
-                icon: Icon(Icons.refresh),
-                label: Text(
-                  'Restart Quiz',
-                  style: TextStyle(fontSize: 16),
-                ),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, // Warna teks
-                  backgroundColor: Theme.of(context).primaryColor, // Warna tombol
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                ),
-                onPressed: resetHandler,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
